@@ -26,15 +26,18 @@ npm run build
 npm run preview
 ```
 
-## Конфигурация API
+## Интеграция с backend
 
 Скопируйте `.env.example` в `.env` и задайте адрес backend-сервиса:
 
 ```bash
-VITE_API_BASE_URL=http://localhost:8080
+VITE_API_BASE_URL=
+VITE_BACKEND_PROXY_TARGET=http://localhost:8081
 ```
 
-На первом этапе интерфейс реализован как интерактивный дизайн-прототип: загрузка PDF, выбор модели и анимация генерации работают локально. В следующей итерации он будет подключён к общей backend-ручке генерации DOCX, а результатом станут скачиваемый документ и список расходников.
+Интерфейс запрашивает доступные модели через `GET /api/v1/maintenance/models` и отправляет PDF вместе с выбранной моделью в `POST /api/v1/maintenance/document`. Он разбирает multipart-ответ backend, отдаёт DOCX на скачивание и отображает список расходников.
+
+В production API доступно на том же origin через Nginx reverse proxy, поэтому CORS не требуется. Dockerfile frontend используется общим `docker compose` в основном репозитории.
 
 ## Ветки
 
